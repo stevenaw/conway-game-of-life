@@ -11,8 +11,10 @@ namespace ConwaysGameOfLife
         {
             await Parser.Default.ParseArguments<Options>(args).WithParsedAsync(async opts =>
             {
-                var delay = TimeSpan.FromMilliseconds(opts.Delay);
+                var generationLength = TimeSpan.FromMilliseconds(opts.GenerationLength);
                 var game = await Initialize(opts);
+
+                var generationCount = opts.GenerationCount <= 0 ? int.MaxValue : opts.GenerationCount;
 
                 Console.Clear();
                 Console.CursorVisible = false;
@@ -20,9 +22,9 @@ namespace ConwaysGameOfLife
                 await Console.Out.WriteAsync($"Press Ctrl+C  or any key to exit");
 
                 await game.Run(
-                    delay,
-                    opts.GenerationCount,
-                    Render,
+                    generationLength,
+                    generationCount,
+                    game => Render(game, generationCount),
                     () => Console.KeyAvailable);
             });
         }
@@ -39,13 +41,20 @@ namespace ConwaysGameOfLife
             return new Life(data);
         }
 
-        private static void Render(Life game)
+        private static void Render(Life game, int generationCount)
         {
             const char DEAD_CELL = ' ';
             const char LIVE_CELL = 'X';
 
             Console.SetCursorPosition(0, 1);
-            Console.WriteLine($"Generation: {game.CurrentGeneration.N.ToString()}");
+
+            if (generationCount == int.MaxValue)
+                Console.WriteLine($"Generation: {game.CurrentGeneration.N.ToString()}");
+            else
+            {
+                var genCountStr = generationCount.ToString();
+                Console.WriteLine($"Generation: {game.CurrentGeneration.N.ToString().PadLeft(genCountStr.Length)} / {genCountStr}");
+            }
 
             Console.Write('/');
             for (var i = 0; i < game.Width; i++)

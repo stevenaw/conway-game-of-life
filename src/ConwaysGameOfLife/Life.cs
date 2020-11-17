@@ -30,13 +30,11 @@ namespace ConwaysGameOfLife
 
         public async Task Run(
             TimeSpan generationLength,
-            int? maxGenerationCount,
+            int generationCount,
             Action<Life> render,
             Func<bool> exit)
         {
-            var maxGenerations = Math.Clamp(maxGenerationCount ?? int.MaxValue, 1, int.MaxValue);
-
-            while (CurrentGeneration.N <= maxGenerations)
+            while (CurrentGeneration.N <= generationCount)
             {
                 render(this);
                 await Task.Delay(generationLength);

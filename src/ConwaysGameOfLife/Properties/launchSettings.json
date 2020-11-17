@@ -2,7 +2,7 @@
   "profiles": {
     "ConwaysGameOfLife": {
       "commandName": "Project",
-      "commandLineArgs": "--delay 200 -n 10 -f TestData/Initialization.txt"
+      "commandLineArgs": "--length 200 --count 10 --file TestData/Initialization.txt"
     }
   }
 }
