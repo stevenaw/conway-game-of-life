@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ConwaysGameOfLife": {
+      "commandName": "Project",
+      "commandLineArgs": "--delay 200 -n 10 -f TestData/Initialization.txt"
+    }
+  }
+}

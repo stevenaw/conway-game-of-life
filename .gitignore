@@ -1,0 +1,7 @@
+*.exe
+*.dll
+*/bin
+*/obj
+.vs
+*.log
+**/BenchmarkDotNet.Artifacts
