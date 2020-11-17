@@ -41,25 +41,31 @@ namespace ConwaysGameOfLife
 
         private static void Render(Life game)
         {
+            const char DEAD_CELL = ' ';
+            const char LIVE_CELL = 'X';
+
             Console.SetCursorPosition(0, 1);
             Console.WriteLine($"Generation: {game.CurrentGeneration.N.ToString()}");
 
-            for (var i = 0; i < game.Width + 2; i++)
+            Console.Write('/');
+            for (var i = 0; i < game.Width; i++)
                 Console.Write('-');
-            Console.WriteLine();
+            Console.WriteLine('\\');
 
             foreach (var row in game.CurrentGeneration.Data)
             {
                 Console.Write('|');
 
                 foreach (var col in row)
-                    Console.Write(col ? 'X' : ' ');
+                    Console.Write(col ? LIVE_CELL : DEAD_CELL);
 
                 Console.WriteLine('|');
             }
 
-            for (var i = 0; i < game.Width + 2; i++)
+            Console.Write('\\');
+            for (var i = 0; i < game.Width; i++)
                 Console.Write('-');
+            Console.WriteLine('/');
         }
     }
 }
