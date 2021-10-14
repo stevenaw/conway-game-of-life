@@ -1,44 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ConwaysGameOfLife
 {
     public class DataFileParser
     {
-        private List<bool[]> Data { get; } = new List<bool[]>();
-
-        private void InitializeParser()
-        {
-            Data.Clear();
-        }
-
         public async Task<bool[][]> ParseAsync(StreamReader reader)
         {
-            InitializeParser();
+            var data = new List<bool[]>();
 
             while (!reader.EndOfStream)
-                Parse(await reader.ReadLineAsync());
+                data.Add(Parse(await reader.ReadLineAsync()));
 
-            if (Data.Count > 0)
+            if (data.Count > 0)
             {
-                var firstLen = Data[0].Length;
-
-                for(var i = 1; i < Data.Count; i++)
+                var firstLen = data[0].Length;
+                for(var i = 1; i < data.Count; i++)
                 {
-                    if (Data[i].Length != firstLen)
+                    if (data[i].Length != firstLen)
                         throw new InvalidOperationException("Input file contained varying lengths");
                 }
             }
 
-            return Data.ToArray();
+            return data.ToArray();
         }
 
-        private void Parse(string line)
+        private static bool[] Parse(string line)
         {
             if (string.IsNullOrEmpty(line))
-                Data.Add(Array.Empty<bool>());
+                return Array.Empty<bool>();
             else
             {
                 var result = GC.AllocateUninitializedArray<bool>(line.Length);
@@ -46,7 +39,7 @@ namespace ConwaysGameOfLife
                 for (var i = 0; i < line.Length; i++)
                     result[i] = line[i] != '0';
 
-                Data.Add(result);
+                return result;
             }
         }
     }

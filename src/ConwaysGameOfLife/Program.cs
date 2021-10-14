@@ -49,7 +49,7 @@ namespace ConwaysGameOfLife
             Console.SetCursorPosition(0, 1);
 
             if (generationCount == int.MaxValue)
-                Console.WriteLine($"Generation: {game.CurrentGeneration.N.ToString()}");
+                Console.WriteLine($"Generation: {game.CurrentGeneration.N}");
             else
             {
                 var genCountStr = generationCount.ToString();
