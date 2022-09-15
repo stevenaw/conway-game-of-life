@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ConwaysGameOfLife
 {
-    public class DataFileParser
+    public static class DataFile
     {
-        public async Task<bool[][]> ParseAsync(StreamReader reader)
+        public static async Task<bool[][]> ParseAsync(IAsyncEnumerable<string> lines)
         {
             var data = new List<bool[]>();
 
-            while (!reader.EndOfStream)
-                data.Add(Parse(await reader.ReadLineAsync()));
+            await foreach (var line in lines)
+                data.Add(Parse(line));
 
             if (data.Count > 0)
             {

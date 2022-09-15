@@ -31,12 +31,7 @@ namespace ConwaysGameOfLife
 
         private static async Task<Life> Initialize(Options opts)
         {
-            var parser = new DataFileParser();
-
-            using var f = File.OpenRead(opts.InputFile);
-            using var reader = new StreamReader(f);
-
-            var data = await parser.ParseAsync(reader);
+            var data = await DataFile.ParseAsync(File.ReadLinesAsync(opts.InputFile));
 
             return new Life(data);
         }
