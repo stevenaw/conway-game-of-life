@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ConwaysGameOfLife
 {
-    public static class DataFile
+    internal static class DataFile
     {
         public static async Task<bool[][]> ParseAsync(IAsyncEnumerable<string> lines)
         {
