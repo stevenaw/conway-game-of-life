@@ -19,7 +19,7 @@ namespace ConwaysGameOfLife
                 Console.Clear();
                 Console.CursorVisible = false;
 
-                await Console.Out.WriteAsync($"Press Ctrl+C  or any key to exit");
+                await Console.Out.WriteAsync("Press Ctrl+C  or any key to exit");
 
                 await game.Run(
                     generationLength,
