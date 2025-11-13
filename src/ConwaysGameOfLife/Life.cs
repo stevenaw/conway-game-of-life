@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace ConwaysGameOfLife
+﻿namespace ConwaysGameOfLife
 {
     public readonly struct LifeGeneration
     {

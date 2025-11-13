@@ -1,7 +1,5 @@
 ﻿using CommandLine;
-using System;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace ConwaysGameOfLife
 {
