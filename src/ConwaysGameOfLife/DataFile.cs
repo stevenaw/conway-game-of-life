@@ -2,14 +2,18 @@
 
 namespace ConwaysGameOfLife
 {
-    internal static class DataFile
+    public static class DataFile
     {
         public static async Task<bool[][]> ParseAsync(IAsyncEnumerable<string> lines)
         {
             var data = new List<bool[]>();
 
             await foreach (var line in lines)
+            {
+                if (string.IsNullOrEmpty(line))
+                    throw new InvalidOperationException("Input file contained empty line");
                 data.Add(Parse(line));
+            }
 
             if (data.Count > 0)
             {
@@ -27,7 +31,7 @@ namespace ConwaysGameOfLife
         private static bool[] Parse(string line)
         {
             if (string.IsNullOrEmpty(line))
-                return Array.Empty<bool>();
+                return [];
             else
             {
                 var result = GC.AllocateUninitializedArray<bool>(line.Length);
