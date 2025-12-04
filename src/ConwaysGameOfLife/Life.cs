@@ -1,4 +1,6 @@
-﻿namespace ConwaysGameOfLife
+﻿using System.Threading;
+
+namespace ConwaysGameOfLife
 {
     public readonly struct LifeGeneration
     {
@@ -25,18 +27,18 @@
             };
         }
 
-        public async Task Run(
+        public async Task RunAsync(
             TimeSpan generationLength,
             int generationCount,
             Action<Life> render,
-            Func<bool> exit)
+            CancellationToken cancellationToken)
         {
             while (CurrentGeneration.N <= generationCount)
             {
                 render(this);
-                await Task.Delay(generationLength);
+                await Task.Delay(generationLength, cancellationToken);
 
-                if (exit())
+                if (cancellationToken.IsCancellationRequested)
                     break;
 
                 Evolve();

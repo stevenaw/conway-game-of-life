@@ -1,5 +1,7 @@
 ﻿using CommandLine;
 using System.IO;
+using System.Threading;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ConwaysGameOfLife
 {
@@ -10,28 +12,30 @@ namespace ConwaysGameOfLife
             await Parser.Default.ParseArguments<Options>(args).WithParsedAsync(async opts =>
             {
                 var generationLength = TimeSpan.FromMilliseconds(opts.GenerationLength);
-                var game = await Initialize(opts);
+                var gameData = await DataFile.ParseAsync(File.ReadLinesAsync(opts.InputFile));
+                var game = new Life(gameData);
 
                 var generationCount = opts.GenerationCount <= 0 ? int.MaxValue : opts.GenerationCount;
 
                 Console.Clear();
                 Console.CursorVisible = false;
 
-                await Console.Out.WriteAsync("Press Ctrl+C  or any key to exit");
+                await Console.Out.WriteAsync("Press Ctrl+C to exit");
 
-                await game.Run(
+                using var cts = new CancellationTokenSource();
+
+                Console.CancelKeyPress += (sender, e) =>
+                {
+                    cts.Cancel();
+                    e.Cancel = true; // Allow us to gracefully end it
+                };
+
+                await game.RunAsync(
                     generationLength,
                     generationCount,
                     game => Render(game, generationCount),
-                    () => Console.KeyAvailable);
+                    cts.Token);
             });
-        }
-
-        private static async Task<Life> Initialize(Options opts)
-        {
-            var data = await DataFile.ParseAsync(File.ReadLinesAsync(opts.InputFile));
-
-            return new Life(data);
         }
 
         private static void Render(Life game, int generationCount)
